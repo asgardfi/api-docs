@@ -89,7 +89,7 @@ Returns available trading strategies and market data across supported protocols.
 - **URL**: `/markets`
 - **Method**: `GET`
 - **Response**:
-  ```json
+  ```ts
   {
     "strategies": {
       "Strategy Name": {
@@ -160,7 +160,7 @@ Generates the necessary transactions to open a position.
 - **URL**: `/create-position`
 - **Method**: `POST`
 - **Body** (`TradeRequestBody`):
-  ```json
+  ```ts
   {
     "protocol": number, // LendingProtocol
     "tokenABank": "string", // Long asset bank/market address
@@ -213,17 +213,17 @@ Submits the signed transactions to the blockchain and records the position in th
 - **URL**: `/submit-create-position-tx`
 - **Method**: `POST`
 - **Body** (`SendAndConfirmPositionRequestBody`):
-  ```json
+  ```ts
   {
     // ... All other fields from the `/create-position` response ...
-    // Simply pass back the exact JSON object you received, modifying ONLY the `signedTxs` field below.
+    // Simply pass back the exact ts object you received, modifying ONLY the `signedTxs` field below.
     
     // CRITICAL: This must contain the signed transaction payloads
     "signedTxs": ["string"] 
   }
   ```
 - **Response**: Database record of the created position.
-  ```json
+  ```ts
   {
     "id": number,
     "ownerAddress": "string",
@@ -251,7 +251,7 @@ Generates transactions to close an existing position.
 - **URL**: `/close-position`
 - **Method**: `POST`
 - **Body** (`CloseIsolatedPositionRequestBody`):
-  ```json
+  ```ts
   {
     "protocol": number,
     "walletPubkey": "string",
@@ -280,10 +280,10 @@ Submits signed transactions to close a position and updates the database.
 - **URL**: `/submit-close-position-tx`
 - **Method**: `POST`
 - **Body** (`SubmitClosePositionTxRequestBody`):
-  ```json
+  ```ts
   {
     // ... All other fields from the `/close-position` response ...
-    // Simply pass back the exact JSON object you received, modifying ONLY the `signedTxs` field below.
+    // Simply pass back the exact ts object you received, modifying ONLY the `signedTxs` field below.
 
     // CRITICAL: This must contain the signed transaction payloads
     "signedTxs": ["string"]
@@ -301,7 +301,7 @@ Retrieves all positions (active and closed) for a user.
 - **URL**: `/positions`
 - **Method**: `POST`
 - **Body**:
-  ```json
+  ```ts
   {
     "walletPubkey": "string"
   }
@@ -314,7 +314,7 @@ Retrieves only active positions for a user.
 - **URL**: `/positions/open`
 - **Method**: `POST`
 - **Body**:
-  ```json
+  ```ts
   {
     "walletPubkey": "string"
   }
@@ -327,7 +327,7 @@ Retrieves only closed positions for a user.
 - **URL**: `/positions/closed`
 - **Method**: `POST`
 - **Body**:
-  ```json
+  ```ts
   {
     "walletPubkey": "string"
   }
@@ -348,7 +348,7 @@ Fetches live data from the blockchain for specified positions to update their st
 - **URL**: `/refresh-positions`
 - **Method**: `POST`
 - **Body** (`RefreshPositionRequestBody`):
-  ```json
+  ```ts
   {
     "positionPDAs": [
       {
@@ -359,7 +359,7 @@ Fetches live data from the blockchain for specified positions to update their st
   }
   ```
 - **Response**:
-  ```json
+  ```ts
   {
     "positions": {
       "<pda>": {
@@ -433,7 +433,7 @@ Returns metadata for all supported tokens.
 - **URL**: `/token-metadata`
 - **Method**: `GET`
 - **Response**:
-  ```json
+  ```ts
   {
     "tokens": [
       {
@@ -499,7 +499,7 @@ The core of the integration revolves around the `margin_positions` table. This i
 
 ### On-Chain Execution Data (Hedge Fund Specific)
 
-For high-precision accounting, rely on the `entryMarketMetadata` and `exitMarketMetadata` JSON blobs. These contain the *actual* swapped amounts confirmed on-chain.
+For high-precision accounting, rely on the `entryMarketMetadata` and `exitMarketMetadata` ts blobs. These contain the *actual* swapped amounts confirmed on-chain.
 
 > **Note**: These fields may take up to **60 seconds** to populate after transaction submission. We are working to make this instantaneous.
 
@@ -512,10 +512,10 @@ const executedPrice = meta.outputAmount / meta.inputAmount;
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `entryMarketMetadata` | JSON | Contains `onChainExecutedMetadata` with `inputMint`, `outputMint`, `inputAmount`, `outputAmount` for the opening swap. |
-| `exitMarketMetadata` | JSON | Contains `onChainExecutedMetadata` for the closing swap. |
-| `openFeesMetadata` | JSON | Breakdown of all fees paid to open (Jito tips, Protocol fees, DEX fees). |
-| `closeFeesMetadata` | JSON | Breakdown of fees paid to close. |
+| `entryMarketMetadata` | ts | Contains `onChainExecutedMetadata` with `inputMint`, `outputMint`, `inputAmount`, `outputAmount` for the opening swap. |
+| `exitMarketMetadata` | ts | Contains `onChainExecutedMetadata` for the closing swap. |
+| `openFeesMetadata` | ts | Breakdown of all fees paid to open (Jito tips, Protocol fees, DEX fees). |
+| `closeFeesMetadata` | ts | Breakdown of fees paid to close. |
 
 ### Transaction Tracking
 
@@ -533,7 +533,7 @@ const executedPrice = meta.outputAmount / meta.inputAmount;
 Errors are returned with appropriate HTTP status codes (typically 422 for logical errors, 500 for server errors).
 
 **Common Error Format:**
-```json
+```ts
 {
   "error": {
     "name": "string",
