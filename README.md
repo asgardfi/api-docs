@@ -18,6 +18,8 @@ All endpoints support authentication via an API Key. While public access is allo
 
 This API provides endpoints for margin trading operations including viewing markets, creating/closing positions, and managing active positions across multiple lending protocols (Marginfi, Kamino, Solend, Drift).
 
+> **Contact**: To obtain an API Key, please contact us on Telegram: **@asgardfi**
+
 ## Conceptual Overview
 
 To effectively integrate with the Asgard Spot Margin Trading API, it is crucial to understand how we define markets, trading pairs, and position direction. This abstraction unifies multiple underlying lending protocols (Marginfi, Kamino, Solend, Drift) into a single consistent interface.
@@ -456,18 +458,6 @@ Returns metadata for a specific token.
 - **URL**: `/token-metadata/:mint`
 - **Method**: `GET`
 - **Response**: Token metadata object.
-
----
-
-## Utility
-
-### Ping
-Health check endpoint.
-
-- **URL**: `/ping`
-- **Method**: `POST`
-- **Response**: `{"message": "pong"}`
-
 ---
 
 ## Database Schema & Position Lifecycle
